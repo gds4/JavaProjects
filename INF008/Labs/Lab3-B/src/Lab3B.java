@@ -5,7 +5,6 @@ public class Lab3B {
         MyArray vet1 = new MyArray(10);
 
         vet1.fillRandom();
-
         vet1.printArray();
     }
 }
