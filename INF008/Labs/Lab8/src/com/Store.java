@@ -55,16 +55,20 @@ public class Store {
     public void setCloseMenssage(String closeMenssage) {
         this.closeMenssage = closeMenssage;
     }
+
     public void setOpenTime(float openTime) {
-        if(openTime < 1f || openTime > 23.59f)
+        if(openTime < 1 || openTime > 23.59)
+            System.out.println("Horario Invalido!");
+        else
             this.openTime = openTime;
-        else
-            System.out.println("Horario Invalido!");
+        
     }
+
     public void setCloseTime(float closeTime) {
-        if(closeTime < 1f || closeTime > 23.59f)
-            this.closeTime = closeTime;
-        else
+        if(closeTime < 1 || closeTime > 23.59)
             System.out.println("Horario Invalido!");
+        else
+            this.closeTime = closeTime;
+        
     }
 }
