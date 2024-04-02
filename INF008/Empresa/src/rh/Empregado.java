@@ -22,6 +22,6 @@ public class Empregado extends Pessoa{
 
     @Override
     public String toString() {
-        return "Empregado: nome= " + this.getName() + ", idade= " + this.getAge() + ", superior= " + this.getSuperior();
+        return "Empregado: nome= " + this.getName() + ", idade= " + this.getAge();
     }
 }

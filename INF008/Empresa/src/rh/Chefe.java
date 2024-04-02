@@ -34,6 +34,6 @@ public class Chefe extends Pessoa{
 
     @Override
     public String toString() {
-        return "Chefe: nome= " + this.getName() + ", idade= " + this.getAge() + ", superior= " + this.getSuperior();
+        return "Chefe: nome= " + this.getName() + ", idade= " + this.getAge();
     }
 }
