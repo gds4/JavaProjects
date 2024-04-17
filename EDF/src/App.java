@@ -24,6 +24,13 @@ public class App{
         System.out.println("Schedule:");
         for (String entry : schedule) {
             System.out.println(entry);
+            
+            // Adicionando um atraso de 1 segundo
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
