@@ -1,9 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.NotEscalableException;
+
 public class EDFScheduler {
 
-    public List<String> schedule(List<Task> tasks){
+    public List<String> schedule(List<Task> tasks) throws NotEscalableException{
+        if(!isPossible(tasks))
+            throw new NotEscalableException();
+
         List<String> schedule = new ArrayList<>();
         int currentTime = 0;
 
@@ -36,14 +41,28 @@ public class EDFScheduler {
             currentTime++;
 
             // Adicionando um atraso de 1 segundo
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            // try {
+            //     Thread.sleep(1000);
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
         }
 
         return schedule;
     }
 
+    private boolean isPossible(List<Task> tasks) {
+        double U = 0.0;
+
+        for(Task x: tasks) 
+            U += (x.executionTime/(double)x.deadline);
+        
+
+        System.out.println("Utilização Total do Processador: " + U);
+
+        if(U > 1) return false;
+
+        return true;
+    }       
+    // U = (executionTime_1/deadline_1) + (executionTime_2/deadline_2)...
 }
