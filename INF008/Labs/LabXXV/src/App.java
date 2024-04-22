@@ -86,6 +86,7 @@ public class App {
 			
 		});
 		loadButton.setBounds(201, 426, 103, 42);
+		loadButton.setMnemonic('L');
 		frame.getContentPane().add(loadButton);
 		
 		JButton saveButton = new JButton("SAVE");
@@ -122,6 +123,7 @@ public class App {
 			}
 		});
 		saveButton.setBounds(370, 426, 103, 42);
+		saveButton.setMnemonic('S');
 		frame.getContentPane().add(saveButton);
 		
 	}
