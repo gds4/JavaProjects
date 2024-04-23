@@ -25,7 +25,9 @@ public class EDFScheduler {
             
             // Caso não tenha nenhuma tarefa para executar
             if (readyTasks.isEmpty()) {
+                schedule.add("Time: " + this.currentTime + ", Task: ");
                 this.currentTime++;
+
                 continue;
             }
             
