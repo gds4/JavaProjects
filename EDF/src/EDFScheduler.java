@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import enums.TaskStats;
 
 import exceptions.NotEscalableException;
 
@@ -12,10 +13,10 @@ public class EDFScheduler {
         if(!isPossible(tasks))
             throw new NotEscalableException();
 
-        // ArrayList<Historic> tasksTimeline = new ArrayList<Historic>();
 
-        List<String> schedule = new ArrayList<>();
+        List<String> eventLog = new ArrayList<>();
         List<Task> readyTasks = new ArrayList<>();
+        Task prevTask = null;
         this.currentTime = 0;
 
         while (!tasks.isEmpty()) {
@@ -25,7 +26,7 @@ public class EDFScheduler {
             
             // Caso não tenha nenhuma tarefa para executar
             if (readyTasks.isEmpty()) {
-                schedule.add("Time: " + this.currentTime + ", Task: ");
+                eventLog.add("Time: " + this.currentTime + ", Task: ");
                 this.currentTime++;
 
                 continue;
@@ -34,12 +35,20 @@ public class EDFScheduler {
             // Busca a tarefa a ser executada seguindo as especificações do EDF
             Task selectedTask = toExecute(readyTasks);
 
+            // Verifica se ouve preempção e grava o log
+            wasPreempted(prevTask, selectedTask, eventLog);
+
             selectedTask.remainingTime--;
-            schedule.add("Time: " + this.currentTime + ", Task: " + selectedTask.name);
 
             // Verifica se a tarefa finalizou
-            if (isTaskCompleted(selectedTask)) 
+            if (isTaskCompleted(selectedTask)){
+                selectedTask.STATS = TaskStats.COMPLETED;
+                eventLog.add("\t Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());
                 tasks.remove(selectedTask);
+            }
+
+            // Guarda qual foi a última tarefa executando
+            prevTask = selectedTask;
 
             // Limpa a lista de prontos
             clearReadyQueue(readyTasks);
@@ -47,13 +56,14 @@ public class EDFScheduler {
             this.currentTime++;
         }
 
-        return schedule;
+        return eventLog;
     }
 
     private List<Task> inQueue(List<Task> tasks, List<Task> queue) {
         for (Task task : tasks) {
             if (task.arrivalTime <= this.currentTime) {
                 queue.add(task);
+                task.STATS = TaskStats.READY;
             }
         }
 
@@ -69,15 +79,30 @@ public class EDFScheduler {
 
         for (Task task : readyTasks) {
             if (task.deadline < selectedTask.deadline) {
-                selectedTask = task;
+                selectedTask = task;    
             }
         }
+
+        if(selectedTask.executionTime != selectedTask.remainingTime)
+            selectedTask.STATS = TaskStats.RUNNING;
+        else
+            selectedTask.STATS = TaskStats.START_RUNNING;
 
         return selectedTask;
     }
 
     private boolean isTaskCompleted(Task selectedTask){
         return selectedTask.remainingTime == 0;
+    }
+
+    private void wasPreempted(Task prevTask, Task selectedTask, List<String> eventLog){
+
+        if(prevTask != null && selectedTask != prevTask && prevTask.STATS != TaskStats.COMPLETED){
+            prevTask.STATS = TaskStats.PREEMPTED;
+            eventLog.add("Time: " + this.currentTime + ", Task: " + prevTask.name + ", Stats: " + prevTask.STATS.getStats() + "\n\t Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());
+        }else{   
+            eventLog.add("Time: " + this.currentTime + ", Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());
+        }
     }
 
     private boolean isPossible(List<Task> tasks) {
