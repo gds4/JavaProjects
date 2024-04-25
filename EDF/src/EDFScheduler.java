@@ -44,13 +44,7 @@ public class EDFScheduler {
             // Verifica se a tarefa finalizou
             if (isTaskCompleted(selectedTask)){
                 selectedTask.STATS = TaskStats.COMPLETED;
-                eventLog.add("\t Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());
-                for(Task tsk : tasks){
-                    System.out.println("Deadline de " + tsk.name + " : " +tsk.deadline +
-                 " - inicio do periodo: "+tsk.periodInitialTime);
-                }
-                System.out.println();
-                
+                eventLog.add("\t Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());                
                 selectedTask.periodInitialTime += selectedTask.period;
                 selectedTask.remainingTime = selectedTask.executionTime;
                 selectedTask.deadline += selectedTask.initialDeadline;
