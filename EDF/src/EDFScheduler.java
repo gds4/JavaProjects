@@ -45,9 +45,9 @@ public class EDFScheduler {
             if (isTaskCompleted(selectedTask)){
                 selectedTask.STATS = TaskStats.COMPLETED;
                 eventLog.add("\t Task: " + selectedTask.name + ", Stats: " + selectedTask.STATS.getStats());
-                selectedTask.initialPeriodTime += selectedTask.period;
+                selectedTask.periodInitialTime += selectedTask.period;
                 selectedTask.remainingTime = selectedTask.executionTime;
-                
+                selectedTask.deadline += selectedTask.initialDeadline;
                 
             }
 
@@ -65,7 +65,7 @@ public class EDFScheduler {
 
     private List<Task> inQueue(List<Task> tasks, List<Task> queue) {
         for (Task task : tasks) {
-            if (task.initialPeriodTime <= this.currentTime) {
+            if (task.periodInitialTime <= this.currentTime) {
                 queue.add(task);
                 task.STATS = TaskStats.READY;
             }
@@ -82,7 +82,7 @@ public class EDFScheduler {
         Task selectedTask = readyTasks.get(0);
 
         for (Task task : readyTasks) {
-            if (task.deadline < selectedTask.deadline && currentTime >= task.initialPeriodTime) {
+            if (task.deadline < selectedTask.deadline && currentTime >= task.periodInitialTime) {
                 selectedTask = task;    
             }
         }

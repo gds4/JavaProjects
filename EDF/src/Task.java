@@ -7,7 +7,8 @@ public class Task {
     int period;
     int executionTime;
     int remainingTime;
-    int initialPeriodTime;
+    int periodInitialTime;
+    int initialDeadline;
     TaskStats STATS;
 
     public Task(String name, int arrivalTime, int deadline, int executionTime) {
@@ -15,7 +16,8 @@ public class Task {
         this.arrivalTime = arrivalTime;
         this.deadline = deadline;
         this.period = deadline;
-        this.initialPeriodTime = arrivalTime;
+        this.periodInitialTime = arrivalTime;
+        this.initialDeadline = deadline;
         this.executionTime = executionTime;
         this.remainingTime = executionTime;
         this.STATS = TaskStats.CREATED;
